@@ -1,6 +1,8 @@
 "use strict";
 import { getProductById } from "./api.js";
 
+updateCartIcon();
+
 const renderSucessMessage = async () => {
   // Fetch Item From LocalStorage
   const productID = JSON.parse(localStorage.getItem("ID"));
@@ -30,3 +32,12 @@ const renderSucessMessage = async () => {
 };
 
 await renderSucessMessage();
+
+function updateCartIcon() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartIcon = document.getElementById("cart-space");
+  const cartIconText = document.createElement("span");
+  cartIconText.classList.add("badge", "bg-danger", "rounded-pill");
+  cartIconText.innerText = cart.length;
+  cartIcon.appendChild(cartIconText);
+}
