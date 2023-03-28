@@ -23,16 +23,17 @@
     <link href="css/style.css" rel="stylesheet" />
   </head>
   <body class="bg-light">
-    <div class="container">
+   
+    <div class="container py-3">
       <header>
         <div
-          class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 mt-4 border-bottom"
+          class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom"
         >
           <a
-            href="/"
+            href="/index.html"
             class="d-flex align-items-center text-dark text-decoration-none"
           >
-            <span class="fs-4 title"> Webshop</span>
+            <span class="fs-4 title">Webshop</span>
           </a>
 
           <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
@@ -54,10 +55,8 @@
                 </svg>
               </a>
             </div>
-
           </nav>
         </div>
-      </header>
       <main>
         <div class="py-5 text-center">
           <h2>Checkout form</h2>
@@ -67,7 +66,7 @@
           <div class="col-md-5 col-lg-4 order-md-last">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
               <span class="text-primary">Your cart</span>
-              <span class="badge bg-primary rounded-pill">1</span>
+              <span class="badge bg-primary rounded-pill" id="cart-badge"></span>
             </h4>
             <ul class="list-group mb-3 cart-list">
               <!--

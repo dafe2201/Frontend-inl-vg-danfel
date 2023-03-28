@@ -1,33 +1,60 @@
 "use strict";
 import { getProductById } from "./api.js";
 
-// Fetch Item From LocalStorage
-const productID = JSON.parse(localStorage.getItem("ID"));
+// Fetch cart from LocalStorage
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-const data = await getProductById(productID);
+// Fetch products in the cart from the API and create a new array with complete objects.
+const cartProducts = await Promise.all(
+  cart.map(async (productID) => {
+    const product = await getProductById(productID);
+    return product;
+  })
+);
 
-const renderPage = (data) => {
+// Render the icon for the cart using the length of the original cart array holding only ID's.
+const renderCartIcon = (cart) => {
+  const cartIcon = document.getElementById("cart-badge");
+  cartIcon.innerText = cart.length;
+}
+
+renderCartIcon(cart);
+
+// Render the cart side of the page with the products.
+const renderCart = (cartProducts) => {
   const content = document.querySelector(".cart-list");
 
-  let htmlContent = `
-  <li class="list-group-item d-flex justify-content-between lh-sm">
-  <div>
-    <h6 class="my-0 mx-3">${data.title}</h6>
-  </div>
-    <span class="text-muted">${data.price}</span>
-    </li>
+  // Create an array with unique items to sort out duplicates from the original cart array.
+  const uniqueProducts = Array.from(new Set(cartProducts.map((product) => product.id)));
+
+  let htmlContent = "";
+
+  uniqueProducts.forEach((productId) => {
+    const productCount = cartProducts.filter((product) => product.id === productId).length; // 1: find all duplicates and put them in an array, 2: return the length value of that array
+
+    const product = cartProducts.find((product) => product.id === productId);
+
+    htmlContent += `
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <div>
+          <h6 class="my-0 mx-3">${product.title}</h6>
+          <span class="text-muted">${product.price}</span>
+        </div>
+        <span class="text-muted">${productCount}</span>
+      </li>
     `;
+  });
 
   content.innerHTML = htmlContent;
 };
 
-renderPage(data);
+ renderCart(cartProducts);
 
-//Action listener
+//Action listener for the form
 document.getElementById("checkout-button").addEventListener("click", validate);
 
 function validate(e) {
-  e.preventDefault(); // Gör så det inte postar formuläret (default)
+  e.preventDefault(); // needed because of submit being default behaviour.
 
   const firstName = document.getElementById("firstName");
   const lastName = document.getElementById("lastName");

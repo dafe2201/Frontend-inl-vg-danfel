@@ -52,7 +52,6 @@ async function addToCart(){
 function updateCartIcon() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartIcon = document.getElementById("cart-space");
-  // Testa att lägga detta direkt in i HTML istället.. Blir mer clean. 
   if (cart.length > 0) {
     const cartIconText = document.createElement("span");
     cartIconText.classList.add("badge", "bg-danger", "rounded-pill");
