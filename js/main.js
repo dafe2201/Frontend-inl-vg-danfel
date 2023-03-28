@@ -1,7 +1,7 @@
 "use strict";
 import { getProducts, getAllProducts } from "./api.js";
 
-updateCartIcon();
+ updateCartIcon();
 // const data = await getProducts(30);
 const data = await getAllProducts();
 
@@ -59,8 +59,11 @@ showMoreBtn.forEach((element) => {
 function updateCartIcon() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartIcon = document.getElementById("cart-space");
-  const cartIconText = document.createElement("span");
-  cartIconText.classList.add("badge", "bg-danger", "rounded-pill");
-  cartIconText.innerText = cart.length;
-  cartIcon.appendChild(cartIconText);
+  if (cart.length > 0) { 
+    const cartIconText = document.createElement("span");
+    cartIconText.classList.add("badge", "bg-danger", "rounded-pill");
+    cartIconText.innerText = cart.length;
+    cartIcon.appendChild(cartIconText);
+  }
+
 }

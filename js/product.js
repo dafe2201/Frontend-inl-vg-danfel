@@ -53,13 +53,16 @@ function updateCartIcon() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartIcon = document.getElementById("cart-space");
   // Testa att lägga detta direkt in i HTML istället.. Blir mer clean. 
-  const cartIconText = document.createElement("span");
-  cartIconText.classList.add("badge", "bg-danger", "rounded-pill");
-  cartIconText.innerText = cart.length;
-  // Remove previous cart value
-  const prevCartIconText = cartIcon.querySelector("span");
-  if (prevCartIconText) {
-    cartIcon.removeChild(prevCartIconText);
+  if (cart.length > 0) {
+    const cartIconText = document.createElement("span");
+    cartIconText.classList.add("badge", "bg-danger", "rounded-pill");
+    cartIconText.innerText = cart.length;
+    // Remove previous cart value
+    const prevCartIconText = cartIcon.querySelector("span");
+    if (prevCartIconText) {
+      cartIcon.removeChild(prevCartIconText);
+    }
+    cartIcon.appendChild(cartIconText);
   }
-  cartIcon.appendChild(cartIconText);
 }
+
