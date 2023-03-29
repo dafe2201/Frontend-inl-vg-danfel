@@ -23,8 +23,6 @@ const renderProduct = (data) => {
         <button class="my-3 w-100 btn btn-lg btn-dark" id="add-to-cart-button">Add to cart</button> 
         `;
 
-
-
         //Gammal :         <a href="/checkout.html" class="my-3 w-100 btn btn-lg btn-dark"> 
         //  Add to cart
         //  </a>
@@ -56,7 +54,7 @@ function updateCartIcon() {
     const cartIconText = document.createElement("span");
     cartIconText.classList.add("badge", "bg-danger", "rounded-pill");
     cartIconText.innerText = cart.length;
-    // Remove previous cart value
+    // Remove previous cart value so it doesn't display twice on the screen.
     const prevCartIconText = cartIcon.querySelector("span");
     if (prevCartIconText) {
       cartIcon.removeChild(prevCartIconText);

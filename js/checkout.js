@@ -21,34 +21,34 @@ const renderCartIcon = (cart) => {
 renderCartIcon(cart);
 
 // Render the cart side of the page with the products.
-const renderCart = (cartProducts) => {
-  const content = document.querySelector(".cart-list");
+// const renderCart = (cartProducts) => {
+//   const content = document.querySelector(".cart-list");
 
-  // Create an array with unique items to sort out duplicates from the original cart array.
-  const uniqueProducts = Array.from(new Set(cartProducts.map((product) => product.id)));
+//   // Create an array with unique items to sort out duplicates from the original cart array.
+//   const uniqueProducts = Array.from(new Set(cartProducts.map((product) => product.id)));
 
-  let htmlContent = "";
+//   let htmlContent = "";
 
-  uniqueProducts.forEach((productId) => {
-    const productCount = cartProducts.filter((product) => product.id === productId).length; // 1: find all duplicates and put them in an array, 2: return the length value of that array
+//   uniqueProducts.forEach((productId) => {
+//     const productCount = cartProducts.filter((product) => product.id === productId).length; // 1: find all duplicates and put them in an array, 2: return the length value of that array
 
-    const product = cartProducts.find((product) => product.id === productId);
+//     const product = cartProducts.find((product) => product.id === productId);
 
-    htmlContent += `
-      <li class="list-group-item d-flex justify-content-between lh-sm">
-        <div>
-          <h6 class="my-0 mx-3">${product.title}</h6>
-          <span class="text-muted">${product.price}</span>
-        </div>
-        <span class="text-muted">${productCount}</span>
-      </li>
-    `;
-  });
+//     htmlContent += `
+//       <li class="list-group-item d-flex justify-content-between lh-sm">
+//         <div>
+//           <h6 class="my-0 mx-3">${product.title}</h6>
+//           <span class="text-muted">${product.price}</span>
+//         </div>
+//         <span class="text-muted">${productCount}</span>
+//       </li>
+//     `;
+//   });
 
-  content.innerHTML = htmlContent;
-};
+//   content.innerHTML = htmlContent;
+// };
 
- renderCart(cartProducts);
+//  renderCart(cartProducts);
 
 //Action listener for the form
 document.getElementById("checkout-button").addEventListener("click", validate);
