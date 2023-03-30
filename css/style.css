@@ -105,7 +105,29 @@ a {
    text-decoration: none;
   }
 
-  #btn-cart {
+  .cart-btn{
+    border-radius: 5px;
+    width: 2em;
+    height: 2em;
+    margin-right: 5px;
+    margin-left: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cart-btn-increment{
+    border-radius: 5px;
+    width: 2em;
+    height: 2em;
+    margin-right: 5px;
+    margin-left: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cart-btn-decrement{
     border-radius: 5px;
     width: 2em;
     height: 2em;

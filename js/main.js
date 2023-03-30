@@ -65,5 +65,4 @@ function updateCartIcon() {
     cartIconText.innerText = cart.length;
     cartIcon.appendChild(cartIconText);
   }
-
 }
