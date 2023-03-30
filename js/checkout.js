@@ -12,6 +12,14 @@ const cartProducts = await Promise.all(
   })
 );
 
+function logCartProducts() {
+  console.log("Items in cartProducts:");
+  cartProducts.forEach((item) => {
+    console.log(item);                             // REMOVE LOGCARTPRODUCTS
+  });
+}
+logCartProducts();
+
 // Render the icon for the cart using the length of the original cart array holding only ID's.
 const renderCartIcon = (cart) => {
   const cartIcon = document.getElementById("cart-badge");
@@ -21,36 +29,87 @@ const renderCartIcon = (cart) => {
 renderCartIcon(cart);
 
 // Render the cart side of the page with the products.
-// const renderCart = (cartProducts) => {
-//   const content = document.querySelector(".cart-list");
+const renderCart = (cartProducts) => {
+  const content = document.querySelector(".cart-list");
 
-//   // Create an array with unique items to sort out duplicates from the original cart array.
-//   const uniqueProducts = Array.from(new Set(cartProducts.map((product) => product.id)));
+  // Create an array with unique items to sort out duplicates from the original cart array. This is only to make it look better on the page.
+  const uniqueProducts = Array.from(new Set(cartProducts.map((product) => product.id)));
 
-//   let htmlContent = "";
+  let htmlContent = "";
 
-//   uniqueProducts.forEach((productId) => {
-//     const productCount = cartProducts.filter((product) => product.id === productId).length; // 1: find all duplicates and put them in an array, 2: return the length value of that array
+  uniqueProducts.forEach((productId) => {
+    const productCount = cartProducts.filter((product) => product.id === productId).length; // 1: find all duplicates and put them in an array, 2: return the length value of that array
 
-//     const product = cartProducts.find((product) => product.id === productId);
+    const product = cartProducts.find((product) => product.id === productId);
 
-//     htmlContent += `
-//       <li class="list-group-item d-flex justify-content-between lh-sm">
-//         <div>
-//           <h6 class="my-0 mx-3">${product.title}</h6>
-//           <span class="text-muted">${product.price}</span>
-//         </div>
-//         <span class="text-muted">${productCount}</span>
-//       </li>
-//     `;
+    htmlContent += `
+              <li class="list-group-item d-flex justify-content-between lh-sm">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-10">
+                      <h6 class="my-0 mx-1" id="cart-product-title">${product.title}</h6>
+                    </div>
+                    <div class="col-2">
+                      <span class="text-muted">${product.price}$</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-7 my-2" id="cart-button-panel">
+                      <button type="button" class="btn btn-sm btn-outline-primary cart-btn-decrement" id="">-</button>
+                      <span class="badge bg-secondary opacity-75" id="cart-product-amount">${productCount}</span>
+                      <button type="button" class="btn btn-sm btn-outline-primary cart-btn-increment" id="${product.id}">+</button>
+                    </div>
+                    <div class="col-4" id="cart-button-panel-2">
+                      <button type="button" class="btn btn-sm btn-outline-success cart-btn" id="btn-cart-check">✓</button>
+                      <button type="button" class="btn btn-sm btn-outline-danger cart-btn" id="btn-cart-delete">X</button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+    `;
+  });
+
+  content.innerHTML = htmlContent;
+
+  
+
+
+
+};
+
+
+
+ renderCart(cartProducts);
+
+   // Add event listeners to increment buttons
+   const incrementBtn = document.querySelectorAll(".cart-btn-increment");
+   incrementBtn.forEach((element) => {
+    const itemID = element.id
+    
+    element.addEventListener("click", () => { 
+
+  });
+});
+
+
+    // Save id for later use in LocalStorage
+    // element.addEventListener("click", () => {
+    //   localStorage.setItem("ID", JSON.stringify(itemId));
+
+//  const showMoreBtn = document.querySelectorAll(".save-id");
+
+// showMoreBtn.forEach((element) => {
+//   const itemId = element.id;
+//   console.log(itemId);
+
+//   // Save id for later use in LocalStorage
+//   element.addEventListener("click", () => {
+//     localStorage.setItem("ID", JSON.stringify(itemId));
 //   });
+// });
 
-//   content.innerHTML = htmlContent;
-// };
 
-//  renderCart(cartProducts);
-
-//Action listener for the form
+//Event listener for the form
 document.getElementById("checkout-button").addEventListener("click", validate);
 
 function validate(e) {
