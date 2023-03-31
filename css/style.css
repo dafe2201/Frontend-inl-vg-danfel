@@ -138,7 +138,7 @@ a {
     align-items: center;
   }
 
-  #cart-product-amount {
+  .opacity-75 {
     border-radius: 5px;
     width: 2em;
     height: 2em;

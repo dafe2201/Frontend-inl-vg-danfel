@@ -4,109 +4,90 @@ import { getProductById } from "./api.js";
 // Fetch cart from LocalStorage
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Fetch products in the cart from the API and create a new array with complete objects.
-const cartProducts = await Promise.all(
-  cart.map(async (productID) => {
-    const product = await getProductById(productID);
-    return product;
-  })
-);
+const data = [];
 
-function logCartProducts() {
-  console.log("Items in cartProducts:");
-  cartProducts.forEach((item) => {
-    console.log(item);                             // REMOVE LOGCARTPRODUCTS
-  });
-}
-logCartProducts();
-
-// Render the icon for the cart using the length of the original cart array holding only ID's.
-const renderCartIcon = (cart) => {
-  const cartIcon = document.getElementById("cart-badge");
-  cartIcon.innerText = cart.length;
+function getAmount(ID) {
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].ID == ID) {
+      return cart[i].amount;
+    }
+  }
+  return 0;
 }
 
-renderCartIcon(cart);
+async function loadData() {
+  for (const element of cart) {
+    const product = await getProductById(element.ID);
+    data.push(product);
+  }
+  renderPage(data);
+}
 
-// Render the cart side of the page with the products.
-const renderCart = (cartProducts) => {
-  const content = document.querySelector(".cart-list");
+loadData();
 
-  // Create an array with unique items to sort out duplicates from the original cart array. This is only to make it look better on the page.
-  const uniqueProducts = Array.from(new Set(cartProducts.map((product) => product.id)));
+function renderPage(data) {
+  const cartList = document.querySelector(".cart-list");
+
+  cartList.innerHTML = ""
 
   let htmlContent = "";
 
-  uniqueProducts.forEach((productId) => {
-    const productCount = cartProducts.filter((product) => product.id === productId).length; // 1: find all duplicates and put them in an array, 2: return the length value of that array
-
-    const product = cartProducts.find((product) => product.id === productId);
-
+  data.forEach((product) => {
     htmlContent += `
-              <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-10">
-                      <h6 class="my-0 mx-1" id="cart-product-title">${product.title}</h6>
-                    </div>
-                    <div class="col-2">
-                      <span class="text-muted">${product.price}$</span>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-7 my-2" id="cart-button-panel">
-                      <button type="button" class="btn btn-sm btn-outline-primary cart-btn-decrement" id="">-</button>
-                      <span class="badge bg-secondary opacity-75" id="cart-product-amount">${productCount}</span>
-                      <button type="button" class="btn btn-sm btn-outline-primary cart-btn-increment" id="${product.id}">+</button>
-                    </div>
-                    <div class="col-4" id="cart-button-panel-2">
-                      <button type="button" class="btn btn-sm btn-outline-success cart-btn" id="btn-cart-check">✓</button>
-                      <button type="button" class="btn btn-sm btn-outline-danger cart-btn" id="btn-cart-delete">X</button>
-                    </div>
-                  </div>
-                </div>
-              </li>
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <div class="container">
+          <div class="row">
+            <div class="col-10">
+              <h6 class="my-0 mx-1" id="cart-product-title">${product.title}</h6>
+            </div>
+            <div class="col-2">
+              <span class="text-muted">${product.price}$</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-7 my-2" id="cart-button-panel">
+              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-decrement" id="">-</button>
+              <span class="badge bg-secondary opacity-75" id="${product.id}">${getAmount(product.id)}</span>
+              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-increment" id="${product.id}">+</button>
+            </div>
+            <div class="col-4" id="cart-button-panel-2">
+              <button type="button" class="btn btn-sm btn-outline-success cart-btn" id="btn-cart-check">✓</button>
+              <button type="button" class="btn btn-sm btn-outline-danger cart-btn" id="btn-cart-delete">X</button>
+            </div>
+          </div>
+        </div>
+      </li>
     `;
   });
 
-  content.innerHTML = htmlContent;
+  cartList.innerHTML = htmlContent;
 
   
+const incrementButtons = document.querySelectorAll(".cart-btn-increment");
 
-
-
-};
-
-
-
- renderCart(cartProducts);
-
-   // Add event listeners to increment buttons
-   const incrementBtn = document.querySelectorAll(".cart-btn-increment");
-   incrementBtn.forEach((element) => {
-    const itemID = element.id
-    
-    element.addEventListener("click", () => { 
-
+incrementButtons.forEach((button) => {
+  const itemid = button.getAttribute("id");
+  button.addEventListener("click", (e) => {
+    e.preventDefault();
+    incrementAmount(itemid);
   });
 });
 
+}
 
-    // Save id for later use in LocalStorage
-    // element.addEventListener("click", () => {
-    //   localStorage.setItem("ID", JSON.stringify(itemId));
+function incrementAmount(itemid) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-//  const showMoreBtn = document.querySelectorAll(".save-id");
+  const productIndex = cart.findIndex((item) => item.ID === itemid);
+  if (productIndex !== -1) {
+    cart[productIndex].amount += 1;
+    const badge = document.getElementById(itemid);
+    badge.textContent = cart[productIndex].amount;
+  }
 
-// showMoreBtn.forEach((element) => {
-//   const itemId = element.id;
-//   console.log(itemId);
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
 
-//   // Save id for later use in LocalStorage
-//   element.addEventListener("click", () => {
-//     localStorage.setItem("ID", JSON.stringify(itemId));
-//   });
-// });
 
 
 //Event listener for the form
