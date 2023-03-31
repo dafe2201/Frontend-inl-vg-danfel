@@ -46,9 +46,9 @@ function renderPage(data) {
           </div>
           <div class="row">
             <div class="col-7 my-2" id="cart-button-panel">
-              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-decrement" id="">-</button>
+              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-decrement" id="dec-${product.id}">-</button>
               <span class="badge bg-secondary opacity-75" id="${product.id}">${getAmount(product.id)}</span>
-              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-increment" id="${product.id}">+</button>
+              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-increment" id="inc-${product.id}">+</button>
             </div>
             <div class="col-4" id="cart-button-panel-2">
               <button type="button" class="btn btn-sm btn-outline-success cart-btn" id="btn-cart-check">✓</button>
@@ -66,10 +66,20 @@ function renderPage(data) {
 const incrementButtons = document.querySelectorAll(".cart-btn-increment");
 
 incrementButtons.forEach((button) => {
-  const itemid = button.getAttribute("id");
+  const itemid = button.id.replace("inc-", "");
   button.addEventListener("click", (e) => {
     e.preventDefault();
     incrementAmount(itemid);
+  });
+});
+
+const decrementButtons = document.querySelectorAll(".cart-btn-decrement");
+
+decrementButtons.forEach((button) => {
+  const itemid = button.id.replace("dec-", "");
+  button.addEventListener("click", (e) => {
+    e.preventDefault();
+    decrementAmount(itemid);
   });
 });
 
@@ -88,6 +98,20 @@ function incrementAmount(itemid) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+function decrementAmount(itemId) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const productIndex = cart.findIndex((item) => item.ID === itemId);
+  if (productIndex !== -1) {
+    if (cart[productIndex].amount > 1) {
+      cart[productIndex].amount -= 1;
+      const badge = document.getElementById(itemId);
+      badge.textContent = cart[productIndex].amount;
+    }
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
 
 
 //Event listener for the form
