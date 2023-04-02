@@ -125,7 +125,11 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    
   }
+
+ 
 
   .cart-btn-decrement{
     border-radius: 5px;

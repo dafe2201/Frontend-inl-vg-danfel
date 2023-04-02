@@ -17,14 +17,14 @@ function getAmount(ID) {
 }
 
 async function getTotalPrice(cart) {
-const cartTotalQuery = document.querySelector("#cart-header");
+  const cartTotalQuery = document.querySelector("#cart-header");
 
   let total = 0;
   for (const item of cart) {
     const product = await getProductById(item.ID);
     total += product.price * item.amount;
   }
-  
+
   cartTotalQuery.textContent = `Your cart total: ${total}$`;
 }
 
@@ -41,7 +41,7 @@ loadData();
 async function renderPage(data) {
   const cartList = document.querySelector(".cart-list");
 
-  cartList.innerHTML = ""
+  cartList.innerHTML = "";
 
   let htmlContent = "";
 
@@ -51,18 +51,28 @@ async function renderPage(data) {
         <div class="container">
           <div class="row">
             <div class="col-10">
-              <h6 class="my-0 mx-1" id="cart-product-title">${product.title}</h6>
+              <h6 class="my-0 mx-1" id="cart-product-title">${
+                product.title
+              }</h6>
             </div>
             <div class="col-2">
-            <button type="button" class="btn btn-sm btn-outline-danger cart-btn" id="btn-cart-delete">X</button>
+            <button type="button" class="btn btn-sm btn-outline-danger cart-btn-delete" id="del-${
+              product.id
+            }">X</button>
 
             </div>
           </div>
           <div class="row">
             <div class="col-7 my-2" id="cart-button-panel">
-              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-decrement" id="dec-${product.id}">-</button>
-              <span class="badge bg-secondary opacity-75" id="${product.id}">${getAmount(product.id)}</span>
-              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-increment" id="inc-${product.id}">+</button>
+              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-decrement" id="dec-${
+                product.id
+              }">-</button>
+              <span class="badge bg-secondary opacity-75" id="${
+                product.id
+              }">${getAmount(product.id)}</span>
+              <button type="button" class="btn btn-sm btn-outline-primary cart-btn-increment" id="inc-${
+                product.id
+              }">+</button>
             </div>
             <div class="col-4" id="cart-button-panel-2">
               <span class="text-muted">${product.price}$</span>
@@ -71,36 +81,52 @@ async function renderPage(data) {
         </div>
       </li>
     `;
-
   });
 
-  
   getTotalPrice(cart);
- 
 
   cartList.innerHTML = htmlContent;
 
+  const deleteButtons = document.querySelectorAll(".cart-btn-delete");
+
+  deleteButtons.forEach((button) => {
+    const itemid = button.id.replace("del-", "");
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      deleteCartItem(itemid);
+      location.reload();
+    });
+  });
+
+  const incrementButtons = document.querySelectorAll(".cart-btn-increment");
+
+  incrementButtons.forEach((button) => {
+    const itemid = button.id.replace("inc-", "");
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      incrementAmount(itemid);
+    });
+  });
+
+  const decrementButtons = document.querySelectorAll(".cart-btn-decrement");
+
+  decrementButtons.forEach((button) => {
+    const itemid = button.id.replace("dec-", "");
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      decrementAmount(itemid);
+    });
+  });
+}
+
+function deleteCartItem(itemid) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const productIndex = cart.findIndex((item) => item.ID === itemid);
   
-const incrementButtons = document.querySelectorAll(".cart-btn-increment");
+  cart.splice(productIndex, 1);
 
-incrementButtons.forEach((button) => {
-  const itemid = button.id.replace("inc-", "");
-  button.addEventListener("click", (e) => {
-    e.preventDefault();
-    incrementAmount(itemid);
-  });
-});
-
-const decrementButtons = document.querySelectorAll(".cart-btn-decrement");
-
-decrementButtons.forEach((button) => {
-  const itemid = button.id.replace("dec-", "");
-  button.addEventListener("click", (e) => {
-    e.preventDefault();
-    decrementAmount(itemid);
-  });
-});
-
+  localStorage.setItem("cart", JSON.stringify(cart));
+  getTotalPrice(cart);
 }
 
 function incrementAmount(itemid) {
@@ -132,7 +158,6 @@ function decrementAmount(itemId) {
   localStorage.setItem("cart", JSON.stringify(cart));
   getTotalPrice(cart);
 }
-
 
 //Event listener for the form
 document.getElementById("checkout-button").addEventListener("click", validate);
