@@ -5,6 +5,7 @@ import { getProductById } from "./api.js";
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const data = [];
+var total = 0;
 
 function getAmount(ID) {
   for (let i = 0; i < cart.length; i++) {
@@ -13,6 +14,18 @@ function getAmount(ID) {
     }
   }
   return 0;
+}
+
+async function getTotalPrice(cart) {
+const cartTotalQuery = document.querySelector("#cart-header");
+
+  let total = 0;
+  for (const item of cart) {
+    const product = await getProductById(item.ID);
+    total += product.price * item.amount;
+  }
+  
+  cartTotalQuery.textContent = `Your cart total: ${total}$`;
 }
 
 async function loadData() {
@@ -25,7 +38,7 @@ async function loadData() {
 
 loadData();
 
-function renderPage(data) {
+async function renderPage(data) {
   const cartList = document.querySelector(".cart-list");
 
   cartList.innerHTML = ""
@@ -41,7 +54,8 @@ function renderPage(data) {
               <h6 class="my-0 mx-1" id="cart-product-title">${product.title}</h6>
             </div>
             <div class="col-2">
-              <span class="text-muted">${product.price}$</span>
+            <button type="button" class="btn btn-sm btn-outline-danger cart-btn" id="btn-cart-delete">X</button>
+
             </div>
           </div>
           <div class="row">
@@ -51,14 +65,18 @@ function renderPage(data) {
               <button type="button" class="btn btn-sm btn-outline-primary cart-btn-increment" id="inc-${product.id}">+</button>
             </div>
             <div class="col-4" id="cart-button-panel-2">
-              <button type="button" class="btn btn-sm btn-outline-success cart-btn" id="btn-cart-check">✓</button>
-              <button type="button" class="btn btn-sm btn-outline-danger cart-btn" id="btn-cart-delete">X</button>
+              <span class="text-muted">${product.price}$</span>
             </div>
           </div>
         </div>
       </li>
     `;
+
   });
+
+  
+  getTotalPrice(cart);
+ 
 
   cartList.innerHTML = htmlContent;
 
@@ -96,6 +114,7 @@ function incrementAmount(itemid) {
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
+  getTotalPrice(cart);
 }
 
 function decrementAmount(itemId) {
@@ -111,6 +130,7 @@ function decrementAmount(itemId) {
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
+  getTotalPrice(cart);
 }
 
 
