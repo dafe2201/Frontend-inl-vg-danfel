@@ -185,6 +185,7 @@ function validate(e) {
   const addressCorrect = addressIsCorrect(address);
   const zipCorrect = zipIsCorrect(zip);
   const countyCorrect = countyIsCorrect(county);
+  const cartNotEmpty = isCartNotEmpty();
 
   const formBools = [
     firstNameCorrect,
@@ -194,6 +195,7 @@ function validate(e) {
     addressCorrect,
     zipCorrect,
     countyCorrect,
+    cartNotEmpty,
   ];
 
   //save customer data to local storage for confirmation page:
@@ -204,6 +206,8 @@ function validate(e) {
 
   checkFormIsValid(formBools);
 }
+
+
 
 const checkFormIsValid = (listOfBooleans) => {
   let checker = (listOfBooleans) =>
@@ -219,6 +223,16 @@ const checkFormIsValid = (listOfBooleans) => {
     console.log("Form not complete");
   }
 };
+
+function isCartNotEmpty() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (cart == null || cart.length == 0) {
+    alert("Your cart is empty");
+    return false;
+  }
+  return true;
+}
+
 
 function nameIsCorrectLength(name) {
   if (name.value.length <= 2 || name.value.length > 50) {

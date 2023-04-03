@@ -22,7 +22,7 @@ const renderProduct = (data) => {
         <p class="my-5 lead fs-4"><strong>Rating:</strong> ${data.rating.rate}/5 (${data.rating.count} votes)</p>
         <button class="my-3 w-100 btn btn-lg btn-dark" id="add-to-cart-button">Add to cart</button> 
         `;
-        
+
   specificProductDiv.innerHTML = htmlContent;
 };
 
@@ -35,7 +35,7 @@ async function addToCart(){
   const productID = JSON.parse(localStorage.getItem("ID"));
   const data = await getProductById(productID);
   
-  let cart = JSON.parse(localStorage.getItem("cart")) || []; // if null - create array
+  let cart = JSON.parse(localStorage.getItem("cart")) || []; 
   
   let existingItem = cart.find(item => item.ID === productID);
   if (existingItem) {
