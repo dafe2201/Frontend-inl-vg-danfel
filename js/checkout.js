@@ -5,7 +5,6 @@ import { getProductById } from "./api.js";
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const data = [];
-var total = 0;
 
 function getAmount(ID) {
   for (let i = 0; i < cart.length; i++) {
@@ -196,6 +195,12 @@ function validate(e) {
     zipCorrect,
     countyCorrect,
   ];
+
+  //save customer data to local storage for confirmation page:
+
+  let customerData = JSON.parse(localStorage.getItem("customerData")) || []; 
+  customerData.push({name: firstName.value + " " + lastName.value, email: email.value, address: address.value, county: county.value, zip: zip.value, phoneNumber: phoneNumber.value});
+  localStorage.setItem("customerData", JSON.stringify(customerData));
 
   checkFormIsValid(formBools);
 }

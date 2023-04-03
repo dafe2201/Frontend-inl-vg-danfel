@@ -171,3 +171,11 @@ a {
   /* #cart-product-title {
     display: flex;
   } */
+
+ #customer-info-confirmation {
+  margin-top: 2em;
+ }
+
+ #thanks {
+  margin-top: 2em;
+ }

@@ -22,11 +22,7 @@ const renderProduct = (data) => {
         <p class="my-5 lead fs-4"><strong>Rating:</strong> ${data.rating.rate}/5 (${data.rating.count} votes)</p>
         <button class="my-3 w-100 btn btn-lg btn-dark" id="add-to-cart-button">Add to cart</button> 
         `;
-
-        //Gammal :         <a href="/checkout.html" class="my-3 w-100 btn btn-lg btn-dark"> 
-        //  Add to cart
-        //  </a>
-
+        
   specificProductDiv.innerHTML = htmlContent;
 };
 
@@ -70,7 +66,7 @@ function updateCartIcon() {
     cartIconText.classList.add("badge", "bg-danger", "rounded-pill");
     cartIconText.innerText = totalItems;
 
-    // Remove previous cart value so it doesn't display twice on the screen.
+    // Remove previous cart value so it doesn't duplicate on screen
     const prevCartIconText = cartIcon.querySelector("span");
     if (prevCartIconText) {
       cartIcon.removeChild(prevCartIconText);

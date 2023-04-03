@@ -62,16 +62,61 @@
             >
 
             <div id="cart-space">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                class="bi bi-cart"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+                />
               </svg>
             </div>
           </nav>
         </div>
       </header>
 
+      <h3 class="my-5 text-center">You have ordered the following items:</h3>
       <main>
-        <div class="confirmation text-center"></div>
+        <div class="confirmation text-start">
+        </div>
+
+        <p class="my-1 lead fs-4" id="price-total">
+          <div class="row">
+            <div class="col">
+              <p id="total-price"></p>
+            </div>
+          </div>
+        </p>
+
+        <div id="customer-info-confirmation">
+          <p><Strong>You have entered the following details:</Strong></p>
+          <div class="row">
+            <div class="col">
+              <p id="name"></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p id="email"></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p id="phone"></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p id="full-address"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center" id="thanks"><h3>Thank you for shopping at Webshop!</h3></div>
       </main>
 
       <footer class="pt-4 my-md-5 pt-md-5 border-top">
