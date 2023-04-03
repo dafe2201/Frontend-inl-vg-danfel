@@ -1,31 +1,12 @@
 "use strict";
 import { getProductById } from "./api.js";
 
-// Fetch cart from LocalStorage
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const data = [];
 
-function getAmount(ID) {
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i].ID == ID) {
-      return cart[i].amount;
-    }
-  }
-  return 0;
-}
-
-async function getTotalPrice(cart) {
-  const cartTotalQuery = document.querySelector("#cart-header");
-
-  let total = 0;
-  for (const item of cart) {
-    const product = await getProductById(item.ID);
-    total += product.price * item.amount;
-  }
-
-  cartTotalQuery.textContent = `Your cart total: ${total}$`;
-}
+updateCartIcon();
+loadData();
 
 async function loadData() {
   for (const element of cart) {
@@ -34,8 +15,6 @@ async function loadData() {
   }
   renderPage(data);
 }
-
-loadData();
 
 async function renderPage(data) {
   const cartList = document.querySelector(".cart-list");
@@ -104,6 +83,7 @@ async function renderPage(data) {
     button.addEventListener("click", (e) => {
       e.preventDefault();
       incrementAmount(itemid);
+      updateCartIcon();
     });
   });
 
@@ -114,6 +94,7 @@ async function renderPage(data) {
     button.addEventListener("click", (e) => {
       e.preventDefault();
       decrementAmount(itemid);
+      updateCartIcon();
     });
   });
 }
@@ -121,7 +102,7 @@ async function renderPage(data) {
 function deleteCartItem(itemid) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const productIndex = cart.findIndex((item) => item.ID === itemid);
-  
+
   cart.splice(productIndex, 1);
 
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -158,11 +139,32 @@ function decrementAmount(itemId) {
   getTotalPrice(cart);
 }
 
+function getAmount(ID) {
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].ID == ID) {
+      return cart[i].amount;
+    }
+  }
+  return 0;
+}
+
+async function getTotalPrice(cart) {
+  const cartTotalQuery = document.querySelector("#cart-header");
+
+  let total = 0;
+  for (const item of cart) {
+    const product = await getProductById(item.ID);
+    total += product.price * item.amount;
+  }
+
+  cartTotalQuery.textContent = `Your cart total: ${total.toFixed(2)}$`;
+}
+
 //Event listener for the form
 document.getElementById("checkout-button").addEventListener("click", validate);
 
 function validate(e) {
-  e.preventDefault(); // needed because of submit being default behaviour.
+  e.preventDefault();
 
   const firstName = document.getElementById("firstName");
   const lastName = document.getElementById("lastName");
@@ -199,15 +201,19 @@ function validate(e) {
   ];
 
   //save customer data to local storage for confirmation page:
-
-  let customerData = JSON.parse(localStorage.getItem("customerData")) || []; 
-  customerData.push({name: firstName.value + " " + lastName.value, email: email.value, address: address.value, county: county.value, zip: zip.value, phoneNumber: phoneNumber.value});
+  let customerData = JSON.parse(localStorage.getItem("customerData")) || [];
+  customerData.push({
+    name: firstName.value + " " + lastName.value,
+    email: email.value,
+    address: address.value,
+    county: county.value,
+    zip: zip.value,
+    phoneNumber: phoneNumber.value,
+  });
   localStorage.setItem("customerData", JSON.stringify(customerData));
 
-  checkFormIsValid(formBools);
+  checkFormIsValid(formBools); // If all returns true - redirect to confirmation.html
 }
-
-
 
 const checkFormIsValid = (listOfBooleans) => {
   let checker = (listOfBooleans) =>
@@ -217,7 +223,6 @@ const checkFormIsValid = (listOfBooleans) => {
 
   if (checker(listOfBooleans) === true) {
     console.log("Form Complete");
-    // Simulate an HTTP redirect:
     window.location.replace("/confirmation.html");
   } else {
     console.log("Form not complete");
@@ -232,7 +237,6 @@ function isCartNotEmpty() {
   }
   return true;
 }
-
 
 function nameIsCorrectLength(name) {
   if (name.value.length <= 2 || name.value.length > 50) {
@@ -303,5 +307,29 @@ function countyIsCorrect(county) {
     county.classList.add("invalid");
     county.placeholder = "Enter a valid county";
     return false;
+  }
+}
+
+function updateCartIcon() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartIcon = document.getElementById("cart-space");
+
+  let totalItems = 0;
+
+  cart.forEach((item) => {
+    totalItems += item.amount;
+  });
+
+  const cartIconText = document.createElement("span");
+  cartIconText.classList.add("badge", "bg-danger", "rounded-pill");
+  cartIconText.innerText = totalItems;
+
+  const prevCartIconText = cartIcon.querySelector("span");
+  if (prevCartIconText) {
+    cartIcon.removeChild(prevCartIconText);
+  }
+
+  if (cart.length > 0) {
+    cartIcon.appendChild(cartIconText);
   }
 }
