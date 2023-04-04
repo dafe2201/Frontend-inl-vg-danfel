@@ -105,7 +105,7 @@ async function renderPage(data) {
 
 function getProductSum(product) {
   const amount = getAmount(product.id);
-  return amount * product.price;
+  return (amount * product.price).toFixed(2);
 }
 
 async function getProductSumByClick(itemid) {  
@@ -115,7 +115,7 @@ async function getProductSumByClick(itemid) {
   const amount = getAmount(itemid);
   console.log(amount);
 
-  query.innerHTML = `${amount * product.price}$`
+  query.innerHTML = `${(amount * product.price).toFixed(2)}$`
 }
 
 function deleteCartItem(itemid) {

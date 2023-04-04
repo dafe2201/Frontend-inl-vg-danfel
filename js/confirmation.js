@@ -8,6 +8,8 @@ const customerList = JSON.parse(localStorage.getItem("customerData")) || [];
 loadData();
 getTotalPrice(cart);
 renderCustomerDetails(customerList);
+// Reset localStorage
+localStorage.clear();
 
 async function loadData() {
   for (const element of cart) {
@@ -16,8 +18,6 @@ async function loadData() {
   }
   renderCart(data);
 }
-
-
 
 async function renderCart(data) {
   // Fetch Item From LocalStorage
@@ -38,15 +38,12 @@ async function renderCart(data) {
   </div>`;
 
       confirmationDiv.innerHTML = htmlContent;
-
-      // Reset localStorage
-      localStorage.clear();
     });
   }
 }
 
-async function renderCustomerDetails(customerList){
-const customer = customerList[length];              // Make sure to pick the latest "customer" entry in the list in case multiple were stored in case of errors in validation.
+async function renderCustomerDetails(customerList) {
+  const customer = customerList[length]; // Make sure to pick the latest "customer" entry in the list in case multiple were stored in case of errors in validation.
 
   const name = document.querySelector("#name");
   name.textContent = `Name: ${customer.name}`;
@@ -59,10 +56,10 @@ const customer = customerList[length];              // Make sure to pick the lat
 
   const address = document.querySelector("#full-address");
   address.innerHTML = "";
-    let htmlContent = `
+  let htmlContent = `
     <p>Address: ${customer.address}, ${customer.zip}, ${customer.county}</p>
     `;
-    address.innerHTML = htmlContent;
+  address.innerHTML = htmlContent;
 }
 
 async function getTotalPrice(cart) {
@@ -75,7 +72,7 @@ async function getTotalPrice(cart) {
   }
 
   totalPrice.innerHTML = "";
- let htmlContent = `
+  let htmlContent = `
   <p><h3>Your cart total: ${total.toFixed(2)}$</h3></p>
   `;
 
