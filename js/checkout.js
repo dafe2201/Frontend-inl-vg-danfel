@@ -53,7 +53,9 @@ async function renderPage(data) {
               }">+</button>
             </div>
             <div class="col-4" id="cart-button-panel-2">
-              <span class="text-muted">${product.price}$</span>
+              <span class="text-muted"  id="tot-${
+                product.id
+              }">${getProductSum(product)}$</span>
             </div>
           </div>
         </div>
@@ -84,6 +86,7 @@ async function renderPage(data) {
       e.preventDefault();
       incrementAmount(itemid);
       updateCartIcon();
+      getProductSumByClick(itemid);
     });
   });
 
@@ -95,8 +98,24 @@ async function renderPage(data) {
       e.preventDefault();
       decrementAmount(itemid);
       updateCartIcon();
+      getProductSumByClick(itemid);
     });
   });
+}
+
+function getProductSum(product) {
+  const amount = getAmount(product.id);
+  return amount * product.price;
+}
+
+async function getProductSumByClick(itemid) {  
+  const product = await getProductById(itemid);
+  const query = document.querySelector(`#tot-${itemid}`);
+
+  const amount = getAmount(itemid);
+  console.log(amount);
+
+  query.innerHTML = `${amount * product.price}$`
 }
 
 function deleteCartItem(itemid) {
@@ -140,6 +159,7 @@ function decrementAmount(itemId) {
 }
 
 function getAmount(ID) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
   for (let i = 0; i < cart.length; i++) {
     if (cart[i].ID == ID) {
       return cart[i].amount;
